@@ -1,0 +1,26 @@
+#设置端口号
+server:
+  port: 9999
+#数据库
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db_authority_system?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: ROOT
+  jackson:
+    date-format: yyyy-MM-dd
+    time-zone: Asia/Shanghai
+  mvc:
+    format:
+      date: yyyy-MM-dd
+      date-time: yyyy-MM-dd HH:mm:ss
+#mybatis-plus配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.hw.entity
+  configuration:
+    map-underscore-to-camel-case: true
+#显示日志
+logging:
+  level: debug
