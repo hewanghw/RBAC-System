@@ -16,7 +16,6 @@ import lombok.EqualsAndHashCode;
  * @since 2023-04-21
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
 @TableName("sys_department")
 public class Department implements Serializable {
 
@@ -25,7 +24,7 @@ public class Department implements Serializable {
     /**
      * 部门编号
      */
-      @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**

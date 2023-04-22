@@ -1,2 +1,5 @@
 /.idea
 /authority/authority.iml
+/authority/target
+/code-generator/code-generator.iml
+/code-generator/target

@@ -1,12 +1,18 @@
 package com.hw.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
+
+import java.util.Collection;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * <p>
@@ -17,16 +23,15 @@ import lombok.EqualsAndHashCode;
  * @since 2023-04-21
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
 @TableName("sys_user")
-public class User implements Serializable {
+public class User implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 用户编号
      */
-      @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -42,22 +47,22 @@ public class User implements Serializable {
     /**
      * 帐户是否过期(1-未过期，0-已过期)
      */
-    private Integer isAccountNonExpired;
+    private boolean accountNonExpired = true;
 
     /**
      * 帐户是否被锁定(1-未过期，0-已过期)
      */
-    private Integer isAccountNonLocked;
+    private boolean accountNonLocked = true;
 
     /**
      * 密码是否过期(1-未过期，0-已过期)
      */
-    private Integer isCredentialsNonExpired;
+    private boolean credentialsNonExpired = true;
 
     /**
      * 帐户是否可用(1-可用，0-禁用)
      */
-    private Integer isEnabled;
+    private boolean enabled = true;
 
     /**
      * 真实姓名
@@ -119,5 +124,19 @@ public class User implements Serializable {
      */
     private Integer isDelete;
 
+    /**
+     * 权限列表
+     */
+    @TableField(exist = false)
+    Collection<? extends GrantedAuthority> authorities;
+    /**
+     * 查询用户权限列表
+     */
+    @TableField(exist = false)
+    private List<Permission> permissionList;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
 }

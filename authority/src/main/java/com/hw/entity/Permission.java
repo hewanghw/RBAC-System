@@ -17,7 +17,6 @@ import lombok.EqualsAndHashCode;
  * @since 2023-04-21
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
 @TableName("sys_permission")
 public class Permission implements Serializable {
 

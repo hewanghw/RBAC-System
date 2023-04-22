@@ -3,7 +3,8 @@ package com.hw.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import org.springframework.stereotype.Controller;
+
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Controller;
  * @author hw
  * @since 2023-04-21
  */
-@Controller
+@RestController
 @RequestMapping("/permission")
 public class PermissionController {
 

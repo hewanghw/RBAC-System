@@ -17,7 +17,6 @@ import lombok.EqualsAndHashCode;
  * @since 2023-04-21
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
 @TableName("sys_role")
 public class Role implements Serializable {
 
@@ -26,7 +25,7 @@ public class Role implements Serializable {
     /**
      * 角色编号
      */
-      @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
