@@ -12,5 +12,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-04-21
  */
 public interface IUserService extends IService<User> {
+    //根据用户名查询用户信息
+    User findUserByUserName(String userName);
+
 
 }
