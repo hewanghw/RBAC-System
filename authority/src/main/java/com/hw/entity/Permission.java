@@ -1,10 +1,15 @@
 package com.hw.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
+
+import java.util.ArrayList;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,7 +30,7 @@ public class Permission implements Serializable {
     /**
      * 权限编号
      */
-      @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -97,6 +102,16 @@ public class Permission implements Serializable {
      * 是否删除(0-未删除，1-已删除)
      */
     private Integer isDelete;
-
-
+    @TableField(exist = false)
+    private List<Permission> children = new ArrayList<Permission>();
+    /**
+     * 用于前端判断是菜单、目录或按钮
+     */
+    @TableField(exist = false)
+    private String value;
+    /**
+     * 是否展开
+     */
+    @TableField(exist = false)
+    private Boolean open;
 }
