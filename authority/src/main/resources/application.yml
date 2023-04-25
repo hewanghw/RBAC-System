@@ -15,6 +15,12 @@ spring:
     format:
       date: yyyy-MM-dd
       date-time: yyyy-MM-dd HH:mm:ss
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    timeout: 10000
+    expire: 60000
 #mybatis-plus配置
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
@@ -28,3 +34,6 @@ logging:
 jwt:
   secret: com.hw
   expiration: 1800000
+request:
+  login:
+    url: /user/login

@@ -1,6 +1,7 @@
 package com.hw.config.security;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hw.config.redis.RedisService;
 import com.hw.entity.User;
 import com.hw.utils.JwtUtils;
 import com.hw.utils.LoginResult;
@@ -21,9 +22,10 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final JwtUtils jwtUtils;
-
-    public LoginSuccessHandler(JwtUtils jwtUtils) {
+    private final RedisService redisService;
+    public LoginSuccessHandler(JwtUtils jwtUtils, RedisService redisService) {
         this.jwtUtils = jwtUtils;
+        this.redisService = redisService;
     }
 
     @Override
@@ -43,6 +45,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         LoginResult loginResult = new LoginResult(user.getId(),
                 ResultCode.SUCCESS,token,expireTime);
         String result = JSONObject.toJSONString(loginResult);
+        //把生成的token存到redis
+        String tokenKey = "token_" + token;
+        redisService.set(tokenKey, token,jwtUtils.getExpiration() / 1000);
         //获取输出流
         ServletOutputStream outputStream = response.getOutputStream();
         outputStream.write(result.getBytes(StandardCharsets.UTF_8));

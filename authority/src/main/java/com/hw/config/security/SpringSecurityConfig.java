@@ -1,5 +1,6 @@
 package com.hw.config.security;
 
+import com.hw.config.security.filter.CheckTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @EnableWebSecurity
@@ -19,14 +21,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private final LoginFailureHandler loginFailureHandler;
     private final AnonymousAuthenticationHandler anonymousAuthenticationHandler;
     private final CustomerAccessDeniedHandler customerAccessDeniedHandler;
+    private final CheckTokenFilter checkTokenFilter;
 
-
-    public SpringSecurityConfig(CustomerUserDetailsService customerUserDetailsService, LoginSuccessHandler loginSuccessHandler, LoginFailureHandler loginFailureHandler, AnonymousAuthenticationHandler anonymousAuthenticationHandler, CustomerAccessDeniedHandler customerAccessDeniedHandler) {
+    public SpringSecurityConfig(CustomerUserDetailsService customerUserDetailsService, LoginSuccessHandler loginSuccessHandler, LoginFailureHandler loginFailureHandler, AnonymousAuthenticationHandler anonymousAuthenticationHandler, CustomerAccessDeniedHandler customerAccessDeniedHandler, CheckTokenFilter checkTokenFilter) {
         this.customerUserDetailsService = customerUserDetailsService;
         this.loginSuccessHandler = loginSuccessHandler;
         this.loginFailureHandler = loginFailureHandler;
         this.anonymousAuthenticationHandler = anonymousAuthenticationHandler;
         this.customerAccessDeniedHandler = customerAccessDeniedHandler;
+        this.checkTokenFilter = checkTokenFilter;
     }
 
     //注入加密处理类
@@ -37,6 +40,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.addFilterBefore(checkTokenFilter,
+                UsernamePasswordAuthenticationFilter.class);
         //登录前进行过滤
         http.formLogin()
                 .loginProcessingUrl("/user/login")
