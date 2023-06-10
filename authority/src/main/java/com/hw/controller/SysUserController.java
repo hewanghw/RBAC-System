@@ -13,6 +13,7 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -128,6 +130,35 @@ public class SysUserController {
         //返回数据
         return UniformResult.ok(routerVoList).message("菜单数据获取成功");
     }
+
+    /**
+     * 用户退出
+     * @param request
+     * @param response
+     * @return
+     */
+    @PostMapping("/logout")
+    public UniformResult logout(HttpServletRequest request, HttpServletResponse response) {
+        //获取token
+        String token = request.getParameter("token");
+        //如果没有从头部获取token，那么从参数里面获取
+        if (ObjectUtils.isEmpty(token)) {
+            token = request.getHeader("token");
+        }
+        //获取用户相关信息
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            //清空用户信息
+            new SecurityContextLogoutHandler().logout(request, response,
+                    authentication);
+            //清空redis里面的token
+            String key = "token_" + token;
+            redisService.del(key);
+        }
+        return UniformResult.ok().message("用户退出成功");
+    }
+
 
 
 
