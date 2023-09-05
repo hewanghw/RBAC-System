@@ -15,4 +15,5 @@ public class UserInfo implements Serializable {
     private String avatar;//头像
     private String introduction;//介绍
     private Object[] roles;//角色权限集合
+    private String realName; //真实姓名
 }
