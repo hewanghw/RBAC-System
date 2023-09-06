@@ -52,12 +52,12 @@ public class JwtUtils {
     /**
      * 生成令牌
      *
-     * @param userDetails 用户
+     * @param user 用户
      * @return 令牌
      */
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>(2);
-        claims.put(Claims.SUBJECT, userDetails.getUsername());
+        claims.put(Claims.SUBJECT, user.getUsername());
         claims.put(Claims.ISSUED_AT, new Date());
         return generateToken(claims);
     }

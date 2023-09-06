@@ -24,7 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 @Data
 @TableName("sys_user")
-public class User implements Serializable, UserDetails {
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -125,18 +125,9 @@ public class User implements Serializable, UserDetails {
     private Integer isDelete;
 
     /**
-     * 权限列表
-     */
-    @TableField(exist = false)
-    Collection<? extends GrantedAuthority> authorities;
-    /**
      * 查询用户权限列表
      */
     @TableField(exist = false)
     private List<Permission> permissionList;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
 }

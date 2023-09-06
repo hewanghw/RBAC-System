@@ -33,7 +33,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         //设置客户端的响应的内容类型
         response.setContentType("application/json;charset=UTF-8");
         //获取当登录用户信息
-        User user = (User) authentication.getPrincipal();
+        CustomUserDetail customUserDetail = (CustomUserDetail) authentication.getPrincipal();
+        User user = customUserDetail.getUser();
         //生成token
         String token = jwtUtils.generateToken(user);
         //设置token签名密钥及过期时间

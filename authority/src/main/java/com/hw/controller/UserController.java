@@ -1,6 +1,7 @@
 package com.hw.controller;
 
 import com.hw.config.redis.RedisService;
+import com.hw.config.security.CustomUserDetail;
 import com.hw.entity.Permission;
 import com.hw.entity.User;
 import com.hw.entity.UserInfo;
@@ -127,7 +128,8 @@ public class UserController {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         //获取用户信息
-        User user = (User) authentication.getPrincipal();
+        CustomUserDetail customUserDetail = (CustomUserDetail) authentication.getPrincipal();
+        User user = customUserDetail.getUser();
         //获取相应的权限
         List<Permission> permissionList = user.getPermissionList();
         //筛选目录和菜单
