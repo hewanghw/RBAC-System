@@ -148,7 +148,7 @@ public class UserController {
      * @param response
      * @return
      */
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public UniformResult logout(HttpServletRequest request, HttpServletResponse response) {
         //获取token
         String token = request.getParameter("token");
@@ -164,7 +164,7 @@ public class UserController {
             new SecurityContextLogoutHandler().logout(request, response,
                     authentication);
             //清空redis里面的token
-            String key = "token_" + token;
+            String key = "access_token:" + token;
             redisService.del(key);
         }
         return UniformResult.ok().message("用户退出成功");

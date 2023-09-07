@@ -73,18 +73,18 @@ public class CheckTokenFilter extends OncePerRequestFilter {
             throw new CustomerAuthenticationException("token不存在");
         }
         //判断redis中是否存在该token
-        String tokenKey = "token_" + token;
+        String tokenKey = "access_token:" + token;
         String redisToken = redisService.get(tokenKey);
         //如果redis里面没有token,说明该token失效
         if (ObjectUtils.isEmpty(redisToken)) {
             throw new CustomerAuthenticationException("token已过期");
         }
-        //如果token和Redis中的token不一致，则验证失败
-        if (!token.equals(redisToken)) {
-            throw new CustomerAuthenticationException("token验证失败");
-        }
+//        //如果token和Redis中的token不一致，则验证失败
+//        if (!token.equals(redisToken)) {
+//            throw new CustomerAuthenticationException("token验证失败");
+//        }
         //如果存在token，则从token中解析出用户名
-        String username = jwtUtils.getUsernameFromToken(token);
+        String username = jwtUtils.getUsernameFromToken(redisToken);
         //如果用户名为空，则解析失败
         if (ObjectUtils.isEmpty(username)) {
             throw new CustomerAuthenticationException("token解析失败");

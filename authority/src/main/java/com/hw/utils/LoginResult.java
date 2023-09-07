@@ -13,7 +13,7 @@ public class LoginResult {
     private Long id;
     //状态码
     private int code;
-    //token令牌
+    //redis中token令牌对应的key
     private String token;
     //token过期时间
     private Long expireTime;

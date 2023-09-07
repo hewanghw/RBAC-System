@@ -6,6 +6,8 @@ import com.hw.entity.User;
 import com.hw.utils.JwtUtils;
 import com.hw.utils.LoginResult;
 import com.hw.utils.ResultCode;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 // 用户认证成功处理类
 @Component
@@ -37,17 +40,18 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         User user = customUserDetail.getUser();
         //生成token
         String token = jwtUtils.generateToken(user);
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        String tokenKey ="access_token:" + uuid;
         //设置token签名密钥及过期时间
         long expireTime = Jwts.parser() //获取DefaultJwtParser对象
                 .setSigningKey(jwtUtils.getSecret()) //设置签名的密钥
-                .parseClaimsJws(token.replace("jwt_", ""))
+                .parseClaimsJws(token)
                 .getBody().getExpiration().getTime();//获取token过期时间
         //创建登录结果对象
-        LoginResult loginResult = new LoginResult(user.getId(),
-                ResultCode.SUCCESS,token,expireTime);
+        LoginResult loginResult = new LoginResult(user.getId(), ResultCode.SUCCESS,
+                uuid, expireTime);
         String result = JSONObject.toJSONString(loginResult);
         //把生成的token存到redis
-        String tokenKey = "token_" + token;
         redisService.set(tokenKey, token,jwtUtils.getExpiration() / 1000);
         //获取输出流
         ServletOutputStream outputStream = response.getOutputStream();
