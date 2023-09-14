@@ -36,8 +36,12 @@ public class CheckTokenFilter extends OncePerRequestFilter {
     @Resource
     private RedisService redisService;
     //获取登录请求地址
-    @Value("${request.login.url}")
+    @Value("${request.url.login}")
     private String loginUrl;
+    @Value("${request.url.oauth}")
+    private String oauthUrl;
+    @Value("${request.url.api}")
+    private String apiUrl;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -45,7 +49,7 @@ public class CheckTokenFilter extends OncePerRequestFilter {
             //获取当前请求的url地址
             String url = request.getRequestURI();
             //如果当前请求不是登录请求，则需要进行token验证
-            if (!url.equals(loginUrl)) {
+            if (!url.equals(loginUrl) && !url.matches(oauthUrl) && !url.matches(apiUrl)) {
                 this.validateToken(request);
             }
         } catch (AuthenticationException e) {

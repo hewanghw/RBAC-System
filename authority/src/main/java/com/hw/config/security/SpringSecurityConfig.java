@@ -3,6 +3,7 @@ package com.hw.config.security;
 import com.hw.config.security.filter.CheckTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -59,12 +60,26 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(anonymousAuthenticationHandler)
                 .accessDeniedHandler(customerAccessDeniedHandler)
                 .and().cors(); //开启跨域配置
+
+//        http.authorizeRequests()
+//                .antMatchers("/user/login").permitAll()
+//                .antMatchers("/oauth/authorize").authenticated()
+//                .and()
+//                .formLogin()
+//                .loginProcessingUrl("/user/login")
+//                .successHandler(loginSuccessHandler).failureHandler(loginFailureHandler);
     }
 
     //配置认证处理器
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customerUserDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
 }

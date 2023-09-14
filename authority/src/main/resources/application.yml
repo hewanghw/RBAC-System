@@ -33,7 +33,9 @@ logging:
     com.hw: debug
 jwt:
   secret: com.hw
-  expiration: 1800000
+  expiration: 18000000
 request:
-  login:
-    url: /user/login
+  url:
+    login: /user/login
+    oauth: /oauth/.*
+    api: /api/.*

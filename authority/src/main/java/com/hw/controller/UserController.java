@@ -102,7 +102,8 @@ public class UserController {
             return UniformResult.error().message("用户信息查询失败");
         }
         //获取用户信息
-        User user = (User) authentication.getPrincipal();
+        CustomUserDetail customUserDetail = (CustomUserDetail)authentication.getPrincipal();
+        User user = customUserDetail.getUser();
         //用户权限集合
         List<Permission> permissionList = user.getPermissionList();
         //获取角色权限编码字段
@@ -148,7 +149,7 @@ public class UserController {
      * @param response
      * @return
      */
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public UniformResult logout(HttpServletRequest request, HttpServletResponse response) {
         //获取token
         String token = request.getParameter("token");
